@@ -1,0 +1,55 @@
+{% extends 'layoutBack.html.twig' %}
+{% block body %}
+    <h1>Liste demande covoiturage animalier</h1>
+
+    <form action="" method="get">
+        <label for="filter">Rechercher par utilisateur</label>
+        <input name="filter" type="text">
+        <button type="submit" class="btn btn-default btn-sm">Lawej</button>
+    </form>
+
+    <table data-toggle="table"  style="" >
+
+        <tr style="font-family: 'Arial Black' ">
+            <td>Type de la marchandise</td>
+            <td>Ville de départ</td>
+            <td>Ville d'arrivée</td>
+            <td>Description</td>
+            <td>Poids</td>
+            <td>Quantité</td>
+            <td>Prix</td>
+            <td>Utilisateur</td>
+            <td>Chta3mel?</td>
+        </tr>
+
+        <tbody>
+        {% for ridepackage in pagination %}
+                <tr>
+                    <td>{{ ridepackage.typepackage }}</td>
+                    <td>{{ ridepackage.idtrajet.citysource }}</td>
+                    <td>{{ ridepackage.idtrajet.citydestination }}</td>
+                    <td>{{ ridepackage.description }}</td>
+                    <td>{{ ridepackage.poids }}</td>
+                    <td>{{ ridepackage.quantity }}</td>
+                    <td>{{ ridepackage.prix }}</td>
+                    <td>{{ ridepackage.iduser.username }}</td>
+                    <td>
+
+                        <ul>
+                            <li>
+                                <a href="{{ path('ridepackage_show', { 'id': ridepackage.idPackage }) }}">Choufni!</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('chaya3ni_deleteridedmin', { 'id': ridepackage.idPackage }) }}">Fasa5ni?</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="navigation text-center">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{% endblock %}

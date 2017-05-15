@@ -1,0 +1,28 @@
+chaya3ni_user_ridepackage:
+    resource: "@Chaya3niUserBundle/Resources/config/routing/ridepackage.yml"
+    prefix:   /ridepackage
+
+chaya3ni_user_homepage:
+    path:     /
+    defaults: { _controller: Chaya3niUserBundle:Default:index }
+chaya3ni_homepageuser:
+    path:     /user/userpage
+    defaults: { _controller: Chaya3niUserBundle:Default:userpage }
+chaya3ni_homepageemployee:
+    path:     /employee/employeepage
+    defaults: { _controller: Chaya3niUserBundle:Default:employeepage }
+chaya3ni_homepageadmin:
+    path:     /admin/adminpage
+    defaults: { _controller: Chaya3niUserBundle:Default:adminpage }
+chaya3ni_deleteridedmin:
+    path:     /admin/{id}/delete
+    defaults: { _controller: Chaya3niUserBundle:Default:deletepackage }
+    methods:  GET
+chaya3ni_homepagerepresentant:
+    path:     /representant/reppage
+    defaults: { _controller: Chaya3niUserBundle:Default:representantpage }
+user_logout:
+    path: /logout
+user_register:
+        path: /register
+

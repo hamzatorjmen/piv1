@@ -1,0 +1,140 @@
+{% extends 'Layout.html.twig' %}
+{% block body %}
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#trajeths").hide() ;
+        $("#badelni").click(function () {
+            $("#trajeths").show("slow") ;
+        }) ;
+        $("#annulation").click(function () {
+            $("#trajeths").hide("slow") ;
+            document.getElementById('idtrajet').value = document.getElementById('oidtrajet').value ;
+            initMap() ;
+        }) ;
+    }) ;
+    // You can set control options to change the default position or style of many
+    // of the map controls.
+    function initMap() {
+        var map_AV = google.maps.MapTypeId.ROADMAP ;
+        var latsource = document.getElementById('latsource').value;
+        var longsource = document.getElementById('longsource').value ;
+        var latdestination = document.getElementById('latdestination').value;
+        var longdestination = document.getElementById('longdestination').value;
+        var depart = new google.maps.LatLng (latsource, longsource) ;
+        var arrive = new google.maps.LatLng (latdestination, longdestination) ;
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: depart,
+            zoom: 10,
+            mapTypeId: map_AV
+        });
+        var marqueurD = new google.maps.Marker({position : depart,}) ;
+        var marqueurA = new google.maps.Marker({position : arrive,}) ;
+
+        marqueurD.setMap(map) ;
+        marqueurA.setMap(map) ;
+        var directionsService = new google.maps.DirectionsService() ;
+        var directionsDisplay = new google.maps.DirectionsRenderer({
+            'map': map
+        }) ;
+        var request = {
+            origin: depart,
+            destination: arrive,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        directionsService.route(request, function (result, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(result);
+            }
+        });
+    }
+    function NewMap(latsource , longsource , latdestination , longdestination , id) {
+        var map_AV = google.maps.MapTypeId.ROADMAP ;
+        var depart = new google.maps.LatLng (latsource, longsource) ;
+        var arrive = new google.maps.LatLng (latdestination, longdestination) ;
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: depart,
+            zoom: 10,
+            mapTypeId: map_AV
+        });
+        var marqueurD = new google.maps.Marker({position : depart,}) ;
+        var marqueurA = new google.maps.Marker({position : arrive,}) ;
+
+        marqueurD.setMap(map) ;
+        marqueurA.setMap(map) ;
+        var directionsService = new google.maps.DirectionsService() ;
+        var directionsDisplay = new google.maps.DirectionsRenderer({
+            'map': map
+        }) ;
+        var request = {
+            origin: depart,
+            destination: arrive,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        directionsService.route(request, function (result, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(result);
+                document.getElementById('idtrajet').value = id ;
+            }
+        });
+    }
+    function gotoShow (id) {
+        var href = 'http://localhost/piv1/web/app_dev.php/ridepackage/'+id+'/marchandise' ;
+        window.location.replace(href) ;
+    }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBq8AlM4rSi0QaQtMR0YfirKxpc2nne0E8&signed_in=true&callback=initMap" async defer></script>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h6 style="color: #761c19;font-size: 40px"> Chaya3ni Marchandise</h6>
+    </div>
+        <div class="panel-body">
+            <div class="col-md-6" >
+            {{ form_start(edit_form) }}
+            <label>Description </label>{{ form_widget(edit_form.description) }} <br>
+            <label>Taille </label>{{ form_widget(edit_form.size) }} <br>
+            <label>Type de marchandise </label>{{ form_widget(edit_form.typepackage) }} <br>
+            <label>Quantité </label>{{ form_widget(edit_form.quantity) }} <br>
+            <label>Poids de la marchandise </label>{{ form_widget(edit_form.poids) }} <br>
+            <label>Prix du marchandise </label>{{ form_widget(edit_form.prix) }} <br>
+                <input type="hidden" value="{{ ride.latsource }}" id="latsource" hidden>
+                <input type="hidden" value="{{ ride.longsource }}" id="longsource" hidden>
+                <input type="hidden" value="{{ ride.latdestination }}" id="latdestination" hidden>
+                <input type="hidden" value="{{ ride.longdestination }}" id="longdestination" hidden>
+            <input type="hidden" value="{{ ride.id }}" name="idtrajet" id="idtrajet">
+                <input type="hidden" value="{{ ride.id }}" name="oidtrajet" id="oidtrajet">
+            <input type="submit" value="Chaya3ni" /> <input type="button" value="Annuler" onclick="gotoShow({{ ride.id }})">
+
+        </div>
+        {{ form_end(edit_form) }}
+            <div>
+                <label>Changer le trajet  </label> <input type="button" value="Badelni?" id="badelni">
+                <div id="trajeths">
+                    <h3 style="color: #761c19;font-size: 40px" id="choixh3">Veulliez Choisir un trajet</h3>
+                    <div style=" overflow:scroll;width:554px ; height:440px ;" >
+                        <table id="table">
+                            <tr>
+                                <td>Source</td>
+                                <td>Destination</td>
+
+                            </tr>
+                            {% for trajet in trajets %}
+                                <tr>
+                                    <td>{{ trajet.citysource }}</td>
+                                    <td>{{ trajet.citydestination }}</td>
+                                    <td><input type="button" value="Choufni" onclick="NewMap({{ trajet.latsource }} , {{ trajet.longsource }} , {{ trajet.latdestination }} , {{ trajet.longdestination }} , {{ trajet.id }})"> </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <input type="button" value="Annuler le changement" name="annulation" id="annulation" style="margin: 20px">
+                </div>
+                    <div id="map" style="width:550px; height:500px; margin: 20px">
+
+                    </div>
+            </div>
+    </div>
+</div>
+    {% endblock %}

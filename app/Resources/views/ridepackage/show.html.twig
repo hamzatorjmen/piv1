@@ -1,0 +1,79 @@
+{% extends 'Layout.html.twig' %}
+{% block body %}
+    <script>
+        // You can set control options to change the default position or style of many
+        // of the map controls.
+
+        function initMap() {
+            var map_AV = google.maps.MapTypeId.ROADMAP ;
+            var latsource = document.getElementById('latsource').value;
+            var longsource = document.getElementById('longsource').value ;
+            var latdestination = document.getElementById('latdestination').value;
+            var longdestination = document.getElementById('longdestination').value;
+            var depart = new google.maps.LatLng (latsource, longsource) ;
+            var arrive = new google.maps.LatLng (latdestination, longdestination) ;
+            //var mapProp = { center:depart,zoom:15,mapTypeId: map_AV} ;
+            //var map = new google.maps.Map(document.getElementById('map'),mapProp) ;
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: depart,
+                zoom: 10,
+                mapTypeId: map_AV
+            });
+            var marqueurD = new google.maps.Marker({position : depart,}) ;
+            var marqueurA = new google.maps.Marker({position : arrive,}) ;
+
+            marqueurD.setMap(map) ;
+            marqueurA.setMap(map) ;
+            var directionsService = new google.maps.DirectionsService() ;
+            var directionsDisplay = new google.maps.DirectionsRenderer({
+                'map': map
+            }) ;
+            var request = {
+                origin: depart,
+                destination: arrive,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+            directionsService.route(request, function (result, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(result);
+                }
+            });
+        }
+
+        function gotoEdit (id) {
+            var href = 'http://localhost/piv1/web/app_dev.php/ridepackage/'+id+'/modifiermarchandise' ;
+            window.location.replace(href) ;
+        }
+        function gotoList () {
+            var href = 'http://localhost/piv1/web/app_dev.php/ridepackage/' ;
+            window.location.replace(href) ;
+        }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBq8AlM4rSi0QaQtMR0YfirKxpc2nne0E8&signed_in=true&callback=initMap" async defer></script>
+    <div class="panel panel-default">
+        <div class="panel panel-default">
+            <h6 style="color: #761c19;font-size: 40px">Marchandise : {{ ridepackage.typepackage }}</h6>
+        </div>
+        <input type="button" value="Liste des marchandises" onclick="gotoList()">
+    <div class="panel-body">
+        <div class="col-md-6" style="margin-top: 80px">
+                <label><strong>Description : {{ ridepackage.description }}</strong>
+                </label> <br>
+                <label>Taille : {{ ridepackage.size }}</label><br>
+                <label>Quantité : {{ ridepackage.quantity }}</label><br>
+                <label>Poids : {{ ridepackage.poids }}</label><br>
+                <label>Prix : {{ ridepackage.prix }}</label><br>
+                <input type="hidden" value="{{ trajet.latsource }}" id="latsource">
+                <input type="hidden" value="{{ trajet.longsource }}" id="longsource">
+                <input type="hidden" value="{{ trajet.latdestination }}" id="latdestination">
+                <input type="hidden" value="{{ trajet.longdestination }}" id="longdestination">
+            {{ form_start(delete_form) }}
+            <input type="submit" value="Fasa5ni" style="margin-right: 50px">
+            <input type="button" value="Badelni?" onclick="gotoEdit({{ ridepackage.idPackage }})">
+            {{ form_end(delete_form) }}
+        </div>
+        <div class="col-md-6" id="map" style="width:550px; height:500px;"></div>
+    </div>
+    </div>
+{% endblock %}

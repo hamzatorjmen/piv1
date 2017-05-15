@@ -1,0 +1,36 @@
+{% extends 'Layout.html.twig' %}
+{% block body %}
+    <script>
+        function gotoNew() {
+            var href = 'http://localhost/piv1/web/app_dev.php/ridepackage/ajoutmarchandise' ;
+            window.location.replace(href) ;
+        }
+    </script>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Liste des marchandise covoituré : {{ pagination.getTotalItemCount }} marchandises</h1> <input type="button" value="Chaya3ni ?" onclick="gotoNew()" style="margin-bottom: 30px">
+        </div>
+        {% for ridepackage in pagination %}
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4><i class="fa fa-fw fa-check"></i> <a href="{{ path('ridepackage_show', { 'id': ridepackage.idPackage }) }}">{{ ridepackage.typepackage }}</a></h4>
+                    </div>
+                    <div class="panel-body">
+                        <p>Description : {{ ridepackage.description }}</p>
+                        <p>Ville de départ : {{ ridepackage.idtrajet.citysource }}</p>
+                        <p>Ville de d'arrivé : {{ ridepackage.idtrajet.citydestination }}</p>
+                        <p>Taille de la marchandise : {{ ridepackage.size }}</p>
+                        <p>Prix : {{ ridepackage.prix }}</p>
+                        <a href="{{ path('ridepackage_show', { 'id': ridepackage.idPackage }) }}" class="btn btn-default">Voir le trajet</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="col-md-12">
+            <div class="text-center">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

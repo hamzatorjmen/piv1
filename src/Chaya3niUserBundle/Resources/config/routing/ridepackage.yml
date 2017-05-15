@@ -1,0 +1,24 @@
+ridepackage_index:
+    path:     /
+    defaults: { _controller: "Chaya3niUserBundle:Ridepackage:index" }
+    methods:  GET
+
+ridepackage_show:
+    path:     /{id}/marchandise
+    defaults: { _controller: "Chaya3niUserBundle:Ridepackage:show" }
+    methods:  GET
+
+ridepackage_new:
+    path:     /ajoutmarchandise
+    defaults: { _controller: "Chaya3niUserBundle:Ridepackage:new" }
+    methods:  [GET, POST]
+
+ridepackage_edit:
+    path:     /{id}/modifiermarchandise
+    defaults: { _controller: "Chaya3niUserBundle:Ridepackage:edit" }
+    methods:  [GET, POST]
+
+ridepackage_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "Chaya3niUserBundle:Ridepackage:delete" }
+    methods:  DELETE
